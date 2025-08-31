@@ -11,6 +11,11 @@ type Data struct {
 	DB *sql.DB
 }
 
+type Room struct {
+	ID   int
+	Name string
+}
+
 func Conn(env string) *sql.DB {
 	text, err := os.ReadFile(env)
 	check(err)

@@ -33,7 +33,8 @@ func (data *Data) CreateTables() {
 		id SERIAL PRIMARY KEY,
 		room_id INTEGER REFERENCES room(id),
 		user_id INTEGER REFERENCES account(id),
-		sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		content TEXT
 	);
 	`)
 }

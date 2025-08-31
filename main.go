@@ -12,7 +12,9 @@ func main() {
 	defer data.DB.Close()
 	data.CreateTables()
 	data.CreateAccount("Foo", "Bar")
-	data.CreateRoom("channel")
-	data.JoinRoom("Foo", "channel")
-	server.Route()
+	data.CreateRoom("channel1")
+	data.CreateRoom("channel2")
+	data.JoinRoom("Foo", "channel1")
+	data.JoinRoom("Foo", "channel2")
+	server.Route(&data)
 }

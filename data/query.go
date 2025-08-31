@@ -13,3 +13,19 @@ func (data *Data) room_id(room string) int {
 	check(err)
 	return id
 }
+
+func (data *Data) QueryRooms() []Room {
+	rows := data.query("SELECT * FROM room")
+	defer rows.Close()
+
+	var rooms []Room
+	for rows.Next() {
+		var room Room
+		err := rows.Scan(&room.ID, &room.Name)
+		check(err)
+		rooms = append(rooms, room)
+	}
+	check(rows.Err())
+
+	return rooms
+}
