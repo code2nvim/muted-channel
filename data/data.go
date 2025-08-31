@@ -11,14 +11,10 @@ type Data struct {
 	DB *sql.DB
 }
 
-func connEnv() string {
-	text, err := os.ReadFile(".env")
+func Conn(env string) *sql.DB {
+	text, err := os.ReadFile(env)
 	check(err)
-	return string(text)
-}
-
-func Conn() *sql.DB {
-	connector, err := pq.NewConnector(connEnv())
+	connector, err := pq.NewConnector(string(text))
 	check(err)
 	db := sql.OpenDB(connector)
 	check(err)
