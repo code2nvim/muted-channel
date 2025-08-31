@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"github.com/code2nvim/muted-channel/data"
+)
 
 func main() {
-	fmt.Println("main")
+	data := data.Data{
+		DB: data.Conn(),
+	}
+	defer data.DB.Close()
+	data.CreateTables()
+	data.CreateAccount("Foo", "Bar")
 }
