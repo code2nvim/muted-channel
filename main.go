@@ -16,5 +16,7 @@ func main() {
 	data.CreateRoom("channel2")
 	data.JoinRoom("Foo", "channel1")
 	data.JoinRoom("Foo", "channel2")
+	data.SendMessage("Foo", "channel2", "hello")
+	data.SendMessage("Foo", "channel2", "world")
 	server.Route(&data)
 }

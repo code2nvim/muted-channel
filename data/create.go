@@ -24,15 +24,15 @@ func (database *Database) CreateTables() {
 	);
 
 	CREATE TABLE IF NOT EXISTS member (
-		room_id INTEGER REFERENCES room(id),
 		user_id INTEGER REFERENCES account(id),
+		room_id INTEGER REFERENCES room(id),
 		PRIMARY KEY (room_id, user_id)
 	);
 
 	CREATE TABLE IF NOT EXISTS message (
 		id SERIAL PRIMARY KEY,
-		room_id INTEGER REFERENCES room(id),
 		user_id INTEGER REFERENCES account(id),
+		room_id INTEGER REFERENCES room(id),
 		sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		content TEXT
 	);
@@ -101,4 +101,14 @@ func (database *Database) JoinRoom(user, room string) {
 		user_id, room_id
 	) VALUES ($1, $2);
 	`, user_id, room_id)
+}
+
+func (database *Database) SendMessage(user, room, content string) {
+	user_id, room_id := database.user_id(user), database.room_id(room)
+
+	database.exec(`
+	INSERT INTO message (
+		user_id, room_id, content
+	) VALUES ($1, $2, $3);
+	`, user_id, room_id, content)
 }

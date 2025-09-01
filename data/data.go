@@ -3,6 +3,7 @@ package data
 import (
 	"database/sql"
 	"os"
+	"time"
 
 	"github.com/lib/pq"
 )
@@ -14,6 +15,14 @@ type Database struct {
 type Room struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
+}
+
+type Message struct {
+	ID      int       `json:"id"`
+	User    string    `json:"user"`
+	Room    string    `json:"room"`
+	SentAt  time.Time `json:"sent_at"`
+	Content string    `json:"content"`
 }
 
 func Conn(env string) *sql.DB {
