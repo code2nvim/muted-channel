@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	data := data.Data{
+	data := data.Database{
 		DB: data.Conn(".env"),
 	}
 	defer data.DB.Close()

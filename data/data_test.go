@@ -5,6 +5,6 @@ import (
 )
 
 func TestData(t *testing.T) {
-	data := Data{Conn("../.env")}
+	data := Database{Conn("../.env")}
 	defer data.DB.Close()
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/lib/pq"
 )
 
-type Data struct {
+type Database struct {
 	DB *sql.DB
 }
 
@@ -26,18 +26,18 @@ func Conn(env string) *sql.DB {
 	return db
 }
 
-func (data *Data) exec(query string, args ...any) {
-	_, err := data.DB.Exec(query, args...)
+func (database *Database) exec(query string, args ...any) {
+	_, err := database.DB.Exec(query, args...)
 	check(err)
 }
 
-func (data *Data) query(query string, args ...any) *sql.Rows {
-	rows, err := data.DB.Query(query, args...)
+func (database *Database) query(query string, args ...any) *sql.Rows {
+	rows, err := database.DB.Query(query, args...)
 	check(err)
 	return rows
 }
 
-func (data *Data) queryRow(query string, args ...any) *sql.Row {
-	row := data.DB.QueryRow(query, args...)
+func (database *Database) queryRow(query string, args ...any) *sql.Row {
+	row := database.DB.QueryRow(query, args...)
 	return row
 }

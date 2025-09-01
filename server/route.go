@@ -1,18 +1,20 @@
 package server
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 
 	"github.com/code2nvim/muted-channel/data"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func Route(data *data.Data) {
+func Route(database *data.Database) {
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.GET("/login", func(c *gin.Context) { getLogin(c) })
-	router.GET("/rooms", func(c *gin.Context) { getRooms(c, data) })
+	router.GET("/rooms", func(c *gin.Context) { getRooms(c, database) })
 	router.RunTLS(":8088", ".local/cert.pem", ".local/key.pem")
 }
 
@@ -26,7 +28,18 @@ func getLogin(c *gin.Context) {
 
 }
 
-func getRooms(c *gin.Context, data *data.Data) {
-	rooms := data.QueryRooms()
-	c.JSON(200, rooms)
+func getRooms(c *gin.Context, database *data.Database) {
+	first := database.QueryRooms()
+	get := func(rooms []data.Room) {
+		json, _ := json.Marshal(rooms)
+		c.SSEvent("rooms", json)
+		c.Writer.(http.Flusher).Flush()
+	}
+	get(first)
+	for {
+		rooms := database.QueryRooms()
+		if len(rooms) != len(first) {
+			get(rooms)
+		}
+	}
 }

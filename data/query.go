@@ -1,21 +1,21 @@
 package data
 
-func (data *Data) user_id(user string) int {
+func (database *Database) user_id(user string) int {
 	var id int
-	err := data.queryRow(`SELECT id FROM account WHERE username = $1`, user).Scan(&id)
+	err := database.queryRow(`SELECT id FROM account WHERE username = $1`, user).Scan(&id)
 	check(err)
 	return id
 }
 
-func (data *Data) room_id(room string) int {
+func (database *Database) room_id(room string) int {
 	var id int
-	err := data.queryRow(`SELECT id FROM room WHERE name = $1`, room).Scan(&id)
+	err := database.queryRow(`SELECT id FROM room WHERE name = $1`, room).Scan(&id)
 	check(err)
 	return id
 }
 
-func (data *Data) QueryRooms() []Room {
-	rows := data.query("SELECT * FROM room")
+func (database *Database) QueryRooms() []Room {
+	rows := database.query("SELECT * FROM room")
 	defer rows.Close()
 
 	var rooms []Room

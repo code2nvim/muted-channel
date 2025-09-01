@@ -4,14 +4,14 @@ import (
 	"log"
 )
 
-func (data *Data) CreateTables() {
+func (database *Database) CreateTables() {
 	// TODO: remove all "DROP" after testing
-	data.exec("DROP TABLE IF EXISTS message")
-	data.exec("DROP TABLE IF EXISTS member")
-	data.exec("DROP TABLE IF EXISTS room")
-	data.exec("DROP TABLE IF EXISTS account")
+	database.exec("DROP TABLE IF EXISTS message")
+	database.exec("DROP TABLE IF EXISTS member")
+	database.exec("DROP TABLE IF EXISTS room")
+	database.exec("DROP TABLE IF EXISTS account")
 
-	data.exec(`
+	database.exec(`
 	CREATE TABLE IF NOT EXISTS account (
 		id SERIAL PRIMARY KEY,
 		username VARCHAR(50),
@@ -39,10 +39,10 @@ func (data *Data) CreateTables() {
 	`)
 }
 
-func (data *Data) CreateAccount(username, password string) {
+func (database *Database) CreateAccount(username, password string) {
 	var exists bool
 
-	data.queryRow(`
+	database.queryRow(`
 	SELECT EXISTS (
 		SELECT 1 FROM account WHERE username = $1
 	)
@@ -53,17 +53,17 @@ func (data *Data) CreateAccount(username, password string) {
 		return
 	}
 
-	data.exec(`
+	database.exec(`
 	INSERT INTO account (
 		username, password
 	) VALUES ($1, $2);
 	`, username, password)
 }
 
-func (data *Data) CreateRoom(room string) {
+func (database *Database) CreateRoom(room string) {
 	var exists bool
 
-	data.queryRow(`
+	database.queryRow(`
 	SELECT EXISTS (
 		SELECT 1 FROM room WHERE name = $1
 	)
@@ -74,18 +74,18 @@ func (data *Data) CreateRoom(room string) {
 		return
 	}
 
-	data.exec(`
+	database.exec(`
 	INSERT INTO room (
 		name
 	) VALUES ($1);
 	`, room)
 }
 
-func (data *Data) JoinRoom(user, room string) {
+func (database *Database) JoinRoom(user, room string) {
 	var exists bool
-	user_id, room_id := data.user_id(user), data.room_id(room)
+	user_id, room_id := database.user_id(user), database.room_id(room)
 
-	data.queryRow(`
+	database.queryRow(`
 	SELECT EXISTS (
 		SELECT 1 FROM member WHERE user_id = $1 AND room_id = $2
 	)
@@ -96,7 +96,7 @@ func (data *Data) JoinRoom(user, room string) {
 		return
 	}
 
-	data.exec(`
+	database.exec(`
 	INSERT INTO member (
 		user_id, room_id
 	) VALUES ($1, $2);
