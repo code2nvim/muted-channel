@@ -4,11 +4,13 @@ import (
 	"log"
 
 	"github.com/code2nvim/muted-channel/data"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Route(data *data.Data) {
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.GET("/login", func(c *gin.Context) { getLogin(c) })
 	router.GET("/rooms", func(c *gin.Context) { getRooms(c, data) })
 	router.RunTLS(":8088", ".local/cert.pem", ".local/key.pem")
