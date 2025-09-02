@@ -11,6 +11,12 @@ type Database struct {
 	DB *sql.DB
 }
 
+type Account struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type Room struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`

@@ -28,6 +28,31 @@ func (database *Database) room_id(room string) int {
 	return id
 }
 
+/*
+func (database *Database) QueryAccount(username string) Account {
+	var account Account
+	err := database.queryRow("SELECT * FROM account WHERE username = $1", username).Scan(&account)
+	check(err)
+	return account
+}
+*/
+
+func (database *Database) QueryAccounts() []Account {
+	rows := database.query("SELECT * FROM account")
+	defer rows.Close()
+
+	var accounts []Account
+	for rows.Next() {
+		var account Account
+		err := rows.Scan(&account.ID, &account.Username, &account.Password)
+		check(err)
+		accounts = append(accounts, account)
+	}
+	check(rows.Err())
+
+	return accounts
+}
+
 func (database *Database) QueryRooms() []Room {
 	rows := database.query("SELECT * FROM room")
 	defer rows.Close()
@@ -58,5 +83,6 @@ func (database *Database) QueryMessages(room string) []Message {
 		messages = append(messages, message)
 	}
 	check(rows.Err())
+
 	return messages
 }

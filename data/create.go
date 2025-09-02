@@ -13,13 +13,13 @@ func (database *Database) CreateTables() {
 
 	database.exec(`
 	CREATE TABLE IF NOT EXISTS account (
-		id SERIAL PRIMARY KEY,
+		id       SERIAL PRIMARY KEY,
 		username VARCHAR(50),
 		password VARCHAR(50)
 	);
 
 	CREATE TABLE IF NOT EXISTS room (
-		id SERIAL PRIMARY KEY,
+		id   SERIAL PRIMARY KEY,
 		name VARCHAR(50)
 	);
 

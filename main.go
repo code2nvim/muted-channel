@@ -19,13 +19,18 @@ func main() {
 			)),
 	}
 	defer data.DB.Close()
+
 	data.CreateTables()
 	data.CreateAccount("Foo", "Bar")
-	data.CreateRoom("channel1")
-	data.CreateRoom("channel2")
-	data.JoinRoom("Foo", "channel1")
-	data.JoinRoom("Foo", "channel2")
-	data.SendMessage("Foo", "channel2", "hello")
-	data.SendMessage("Foo", "channel2", "world")
+	data.CreateRoom("default channel")
+	data.CreateRoom("channel 1")
+	data.CreateRoom("channel 2")
+	data.CreateRoom("example")
+	data.JoinRoom("Foo", "channel 1")
+	data.JoinRoom("Foo", "example")
+	data.SendMessage("Foo", "default channel", "default")
+	data.SendMessage("Foo", "example", "Hello")
+	data.SendMessage("Foo", "example", "World")
+
 	server.Route(&data)
 }
