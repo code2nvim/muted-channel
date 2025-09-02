@@ -19,6 +19,7 @@ func Route(database *data.Database) {
 
 	router.POST("/api/account", func(c *gin.Context) { postAccount(c, database) })
 	router.POST("/api/login", func(c *gin.Context) { postLogin(c, database) })
+	router.POST("/api/message", func(c *gin.Context) { postMessage(c, database) })
 
 	router.RunTLS(":8088", ".local/cert.pem", ".local/key.pem")
 }

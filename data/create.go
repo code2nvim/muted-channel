@@ -103,7 +103,7 @@ func (database *Database) JoinRoom(user, room string) {
 	`, user_id, room_id)
 }
 
-func (database *Database) SendMessage(user, room, content string) {
+func (database *Database) CreateMessage(user, room, content string) {
 	user_id, room_id := database.user_id(user), database.room_id(room)
 
 	database.exec(`

@@ -35,3 +35,12 @@ func postLogin(c *gin.Context, database *data.Database) {
 	}
 	c.JSON(http.StatusUnauthorized, gin.H{"status": "Login failed!"})
 }
+
+func postMessage(c *gin.Context, database *data.Database) {
+	var message data.Message
+	if err := c.ShouldBindJSON(&message); err != nil {
+		log.Println(err)
+		return
+	}
+	database.CreateMessage(message.User, message.Room, message.Content)
+}

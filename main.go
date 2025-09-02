@@ -28,9 +28,9 @@ func main() {
 	data.CreateRoom("example")
 	data.JoinRoom("Foo", "channel 1")
 	data.JoinRoom("Foo", "example")
-	data.SendMessage("Foo", "default channel", "default")
-	data.SendMessage("Foo", "example", "Hello")
-	data.SendMessage("Foo", "example", "World")
+	data.CreateMessage("Foo", "default channel", "default")
+	data.CreateMessage("Foo", "example", "Hello")
+	data.CreateMessage("Foo", "example", "World")
 
 	server.Route(&data)
 }
