@@ -4,18 +4,19 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/code2nvim/muted-channel/data"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Route(database *data.Database) {
 	router := gin.Default()
-	router.Use(cors.Default())
-	router.GET("/login", func(c *gin.Context) { getLogin(c) })
-	router.GET("/rooms", func(c *gin.Context) { getRooms(c, database) })
-	router.GET("/room/:name", func(c *gin.Context) { getRoom(c, database) })
+	router.Use(corsMiddleware())
+	router.SetTrustedProxies([]string{os.Getenv("API_PROXY")})
+	router.GET("/api/login", func(c *gin.Context) { getLogin(c) })
+	router.GET("/api/rooms", func(c *gin.Context) { getRooms(c, database) })
+	router.GET("/api/room/:name", func(c *gin.Context) { getRoom(c, database) })
 	router.RunTLS(":8088", ".local/cert.pem", ".local/key.pem")
 }
 

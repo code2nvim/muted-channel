@@ -2,7 +2,6 @@ package data
 
 import (
 	"database/sql"
-	"os"
 	"time"
 
 	"github.com/lib/pq"
@@ -25,10 +24,8 @@ type Message struct {
 	Content string    `json:"content"`
 }
 
-func Conn(env string) *sql.DB {
-	text, err := os.ReadFile(env)
-	check(err)
-	connector, err := pq.NewConnector(string(text))
+func Conn(dsn string) *sql.DB {
+	connector, err := pq.NewConnector(string(dsn))
 	check(err)
 	db := sql.OpenDB(connector)
 	check(err)
