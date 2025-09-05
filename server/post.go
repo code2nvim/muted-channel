@@ -27,7 +27,7 @@ func postLogin(c *gin.Context, database *data.Database) {
 	}
 
 	for _, data := range database.QueryAccounts() {
-		if account.Username == data.Username {
+		if account.Username == data.Username && account.Password == data.Password {
 			c.SetCookie("username", account.Username, 7200, "/", "", false, true)
 			c.JSON(http.StatusOK, gin.H{"status": "Login successful!"})
 			return
