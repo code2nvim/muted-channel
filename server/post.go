@@ -14,7 +14,6 @@ func postAccount(c *gin.Context, database *data.Database) {
 		log.Println(err)
 		return
 	}
-
 	database.CreateAccount(account.Username, account.Password)
 	c.JSON(http.StatusOK, gin.H{"status": "Created account!"})
 }
@@ -25,7 +24,6 @@ func postLogin(c *gin.Context, database *data.Database) {
 		log.Println(err)
 		return
 	}
-
 	for _, data := range database.QueryAccounts() {
 		if account.Username == data.Username && account.Password == data.Password {
 			c.SetCookie("username", account.Username, 7200, "/", "", false, true)
