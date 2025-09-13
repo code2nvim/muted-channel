@@ -41,4 +41,5 @@ func postMessage(c *gin.Context, database *data.Database) {
 		return
 	}
 	database.CreateMessage(message.User, message.Room, message.Content)
+	c.JSON(http.StatusOK, gin.H{"status": "Send successful!"})
 }
