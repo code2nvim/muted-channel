@@ -26,11 +26,10 @@ func postLogin(c *gin.Context, database *data.Database) {
 		return
 	}
 
-	hashed, _ := bcrypt.GenerateFromPassword([]byte(account.Password), bcrypt.DefaultCost)
-
 	for _, data := range database.QueryAccounts() {
-		if account.Username == data.Username && string(hashed) == data.Password {
-			c.SetCookie("username", account.Username, 7200, "/", "", true, true)
+		err := bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(data.Password))
+		if account.Username == data.Username && err != nil {
+			c.SetCookie("username", account.Username, 7200, "/", "", false, true)
 			c.JSON(http.StatusOK, gin.H{"status": "Login successful!"})
 			return
 		}
