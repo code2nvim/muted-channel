@@ -2,6 +2,8 @@ package data
 
 import (
 	"log"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (database *Database) CreateTables() {
@@ -15,7 +17,7 @@ func (database *Database) CreateTables() {
 	CREATE TABLE IF NOT EXISTS account (
 		id       SERIAL PRIMARY KEY,
 		username VARCHAR(50),
-		password VARCHAR(50)
+		password VARCHAR(60)
 	);
 
 	CREATE TABLE IF NOT EXISTS room (
@@ -53,11 +55,15 @@ func (database *Database) CreateAccount(username, password string) {
 		return
 	}
 
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
+	log.Println(string(hashed))
+
 	database.exec(`
 	INSERT INTO account (
 		username, password
 	) VALUES ($1, $2);
-	`, username, password)
+	`, username, hashed)
 }
 
 func (database *Database) CreateRoom(room string) {

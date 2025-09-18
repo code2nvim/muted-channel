@@ -21,6 +21,8 @@ func main() {
 	defer data.DB.Close()
 
 	data.CreateTables()
+
+	// default accounts, rooms and messages
 	data.CreateAccount("Foo", "Bar")
 	data.CreateRoom("default channel")
 	data.CreateRoom("channel 1")

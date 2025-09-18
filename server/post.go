@@ -6,6 +6,7 @@ import (
 
 	"github.com/code2nvim/muted-channel/data"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func postAccount(c *gin.Context, database *data.Database) {
@@ -24,9 +25,12 @@ func postLogin(c *gin.Context, database *data.Database) {
 		log.Println(err)
 		return
 	}
+
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(account.Password), bcrypt.DefaultCost)
+
 	for _, data := range database.QueryAccounts() {
-		if account.Username == data.Username && account.Password == data.Password {
-			c.SetCookie("username", account.Username, 7200, "/", "", false, true)
+		if account.Username == data.Username && string(hashed) == data.Password {
+			c.SetCookie("username", account.Username, 7200, "/", "", true, true)
 			c.JSON(http.StatusOK, gin.H{"status": "Login successful!"})
 			return
 		}
