@@ -27,8 +27,8 @@ func postLogin(c *gin.Context, database *data.Database) {
 	}
 
 	for _, data := range database.QueryAccounts() {
-		err := bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(data.Password))
-		if account.Username == data.Username && err != nil {
+		err := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(account.Password))
+		if account.Username == data.Username && err == nil {
 			c.SetCookie("username", account.Username, 7200, "/", "", false, true)
 			c.JSON(http.StatusOK, gin.H{"status": "Login successful!"})
 			return
