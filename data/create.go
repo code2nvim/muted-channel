@@ -6,13 +6,43 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (database *Database) CreateTables() {
+func (database *Database) CreateNewTables() {
 	// TODO: remove all "DROP" after testing
 	database.exec("DROP TABLE IF EXISTS message")
 	database.exec("DROP TABLE IF EXISTS member")
 	database.exec("DROP TABLE IF EXISTS room")
 	database.exec("DROP TABLE IF EXISTS account")
 
+	database.exec(`
+	CREATE TABLE IF NOT EXISTS account (
+		id       SERIAL PRIMARY KEY,
+		username VARCHAR(50),
+		password VARCHAR(60)
+	);
+
+	CREATE TABLE IF NOT EXISTS room (
+		id   SERIAL PRIMARY KEY,
+		name VARCHAR(50)
+	);
+
+	CREATE TABLE IF NOT EXISTS member (
+		user_id INTEGER REFERENCES account(id),
+		room_id INTEGER REFERENCES room(id),
+		PRIMARY KEY (room_id, user_id)
+	);
+
+	CREATE TABLE IF NOT EXISTS message (
+		id SERIAL PRIMARY KEY,
+		user_id INTEGER REFERENCES account(id),
+		room_id INTEGER REFERENCES room(id),
+		sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		content TEXT
+	);
+	`)
+}
+
+
+func (database *Database) CreateTables() {
 	database.exec(`
 	CREATE TABLE IF NOT EXISTS account (
 		id       SERIAL PRIMARY KEY,

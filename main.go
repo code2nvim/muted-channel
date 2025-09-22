@@ -6,6 +6,7 @@ import (
 
 	"github.com/code2nvim/muted-channel/data"
 	"github.com/code2nvim/muted-channel/server"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -20,7 +21,8 @@ func main() {
 	}
 	defer data.DB.Close()
 
-	data.CreateTables()
+	data.CreateNewTables()
+	// data.CreateTables()
 
 	// default accounts, rooms and messages
 	data.CreateAccount("Foo", "Bar")
@@ -34,5 +36,6 @@ func main() {
 	data.CreateMessage("Foo", "example", "Hello")
 	data.CreateMessage("Foo", "example", "World")
 
-	server.Route(&data)
+	router := gin.Default()
+	server.Route(router, &data)
 }

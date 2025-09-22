@@ -8,11 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Route(database *data.Database) {
-	router := gin.Default()
-
+func Route(router *gin.Engine, database *data.Database) {
 	router.Use(cors.Default())
-	// router.SetTrustedProxies(nil)
 
 	router.GET("/api/rooms", func(c *gin.Context) { getRooms(c, database) })
 	router.GET("/api/room/:name", func(c *gin.Context) { getRoom(c, database) })
